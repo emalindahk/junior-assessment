@@ -1,95 +1,86 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import Link from "next/link";
+import { useState } from "react";
 
-export default function Home() {
+import Header from "./components/header/Header";
+import Button from "./components/button/Button";
+import ProductCard from "./components/productCard/ProductCard";
+
+import styles from "./page.module.scss";
+
+async function getProducts() {
+  const res = await fetch(`${process.env.SCANDI_PUBLIC_API_URL}product/get.php`);
+  const data = await res.json();
+  return data;
+}
+
+export default async function Home() {
+  const [selectedCards, setSelectedCards] = useState([]);
+
+  const res = await getProducts();
+  
+  const handleChange = (id, isChecked) => {
+    setSelectedCards((prevSelectedCards) => {
+      if (isChecked) {
+        if (!prevSelectedCards.includes(id)) {
+          return [...prevSelectedCards, id];
+        }
+      } else {
+        return prevSelectedCards.filter((selectedId) => selectedId !== id);
+      }
+      return prevSelectedCards;
+    });
+  };
+
+  function handleDelete() {
+    console.log("delete", selectedCards);
+    // const res = await fetch(`${process.env.SCANDI_PUBLIC_API_URL}product/delete.php`, {
+    //   body: JSON.stringify({
+    //     ids: selectedCards.toString(),
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   method: "DELETE",
+    // }).then((res) => res.json()
+    // )
+    // if(res.success) {
+    //   revalidatePath('/')
+    // }
+  }
+
+  console.log("dele", selectedCards);
+
+  const actions = (
+    <>
+      <Link className={styles.main__link} href="/product-add">
+        Add
+      </Link>
+      <Button onClick={handleDelete} deleteBtn>
+        Mass Delete
+      </Button>
+    </>
+  );
+  
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <Header label="Product List" children={actions} />
+      <div className={styles.main__productList}>
+        {res.data?.map((item) => (
+          <ProductCard
+            key={item.id}
+            id={item.id}
+            sku={item.sku}
+            title={item.name}
+            price={item.price}
+            category={item.category_name}
+            attribute={item.attribute_name}
+            attribute_value={item.attribute_value}
+            selectedCards={selectedCards}
+            onCheckboxChange={handleChange}
+          />
+        ))}
       </div>
     </main>
-  )
+  );
 }

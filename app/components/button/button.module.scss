@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.btn {
+  border-radius: 0.25rem;
+  border: 1px solid;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  color: white;
+  font-size: 0.8rem;
+
+  &__primary {
+    background-color: $color-button-primary;
+    border-color: $color-button-primary;
+  }
+
+  &__secondary {
+    background-color: $color-button-secondary;
+    border-color: $color-button-secondary;
+  }
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}

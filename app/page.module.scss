@@ -1,0 +1,29 @@
+@import "./variables.scss";
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: 100vh;
+
+  &__link {
+    border-radius: 0.25rem;
+    border: 1px solid;
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    color: white;
+    font-size: 0.8rem;
+    background-color: $color-button-primary;
+    text-decoration: none;
+  }
+
+  &__productList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    overflow-y: auto;
+  }
+}
