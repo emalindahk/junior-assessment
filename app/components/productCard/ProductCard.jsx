@@ -12,12 +12,6 @@ function ProductCard({
   const measurement =
     attribute === "weight" ? "kg" : attribute === "dimensions" ? "cm" : "MB";
 
-   const handleCheckboxChange = (event) => {
-     event.preventDefault();
-     const isChecked = event.target.checked;
-     onCheckboxChange(id);
-   };
-
   return (
     <div className={styles.card}>
       <div className={styles.card__checkbox}>
@@ -28,7 +22,7 @@ function ProductCard({
         />
       </div>
       <span>{sku}</span>
-      <span>{title}</span>
+      <span className={styles.card__title}>{title}</span>
       <span>{price} $</span>
       <div className={styles.card__attributes}>
         <span>{attribute} : </span>

@@ -1,18 +1,23 @@
 @import '../../variables.scss';
 
 .header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    bottom: 0;
     border-bottom: 2px solid $color-grey-2;
-    // box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    height: 60px;
+    background-color: white;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    z-index: 99;
 
     h2 {
         color: $color-text-primary;
         font-size: 1.5rem;
         font-weight: 600;
+        margin-left: 1rem;
     }
 }

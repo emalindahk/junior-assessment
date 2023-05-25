@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import Header from "./components/header/Header";
 import Button from "./components/button/Button";
@@ -53,7 +54,10 @@ export default function Home() {
         method: "DELETE",
       }
     ).then((res) => res.json());
-    if (res.success) router.push("/");
+    if (res.success) {
+      fetchProducts();
+      setSelectedCards([]);
+    }
   };
 
   useEffect(() => {
