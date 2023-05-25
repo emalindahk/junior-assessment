@@ -54,7 +54,7 @@ function ProductAdd() {
         : dimensions.width + "x" + dimensions.height + "x" + dimensions.length,
     });
     const res = await fetch(
-      `${process.env.SCANDI_PUBLIC_API_URL}product/create.php`,
+      `${process.env.NEXT_PUBLIC_API_URL}product/create.php`,
       {
         body: body,
         headers: {

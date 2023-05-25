@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import Header from "./components/header/Header";
 import Button from "./components/button/Button";
@@ -9,47 +11,58 @@ import ProductCard from "./components/productCard/ProductCard";
 import styles from "./page.module.scss";
 
 async function getProducts() {
-  const res = await fetch(`${process.env.SCANDI_PUBLIC_API_URL}product/get.php`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}product/get.php`, {
+    next: {
+      revalidate: 10,
+    },
+  });
   const data = await res.json();
   return data;
 }
 
-export default async function Home() {
+export default function Home() {
   const [selectedCards, setSelectedCards] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  const res = await getProducts();
-  
-  const handleChange = (id, isChecked) => {
-    setSelectedCards((prevSelectedCards) => {
-      if (isChecked) {
-        if (!prevSelectedCards.includes(id)) {
-          return [...prevSelectedCards, id];
-        }
-      } else {
-        return prevSelectedCards.filter((selectedId) => selectedId !== id);
-      }
-      return prevSelectedCards;
-    });
+  const router = useRouter();
+
+  const fetchProducts = useCallback(async () => {
+    const data = await getProducts();
+    setProducts(data.data);
+  }, []);
+
+  const handleChange = (id) => {
+    if (!selectedCards.includes(id)) {
+      setSelectedCards([...selectedCards, id]);
+      return;
+    }
+
+    const removeItem = selectedCards.filter((item) => item !== id);
+    setSelectedCards(removeItem);
   };
 
-  function handleDelete() {
-    console.log("delete", selectedCards);
-    // const res = await fetch(`${process.env.SCANDI_PUBLIC_API_URL}product/delete.php`, {
-    //   body: JSON.stringify({
-    //     ids: selectedCards.toString(),
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "DELETE",
-    // }).then((res) => res.json()
-    // )
-    // if(res.success) {
-    //   revalidatePath('/')
-    // }
-  }
+  const handleDelete = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}product/delete.php`,
+      {
+        body: JSON.stringify({
+          ids: selectedCards.toString(),
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      }
+    ).then((res) => res.json());
+    if (res.success) {
+      console.log(res)
+      revalidatePath("/");
+    }
+  };
 
-  console.log("dele", selectedCards);
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const actions = (
     <>
@@ -61,12 +74,12 @@ export default async function Home() {
       </Button>
     </>
   );
-  
+
   return (
     <main className={styles.main}>
       <Header label="Product List" children={actions} />
       <div className={styles.main__productList}>
-        {res.data?.map((item) => (
+        {products.map((item) => (
           <ProductCard
             key={item.id}
             id={item.id}
@@ -76,7 +89,6 @@ export default async function Home() {
             category={item.category_name}
             attribute={item.attribute_name}
             attribute_value={item.attribute_value}
-            selectedCards={selectedCards}
             onCheckboxChange={handleChange}
           />
         ))}

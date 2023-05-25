@@ -7,32 +7,24 @@ function ProductCard({
   price,
   attribute,
   attribute_value,
-  selectedCards,
   onCheckboxChange,
 }) {
   const measurement =
     attribute === "weight" ? "kg" : attribute === "dimensions" ? "cm" : "MB";
 
-   const isSelected = selectedCards.includes(id);
-   console.log(isSelected);
-
    const handleCheckboxChange = (event) => {
+     event.preventDefault();
      const isChecked = event.target.checked;
-     onCheckboxChange(id, isChecked);
-   };
-
-   const handleClick = () => {
-     const isChecked = !isSelected;
-     onCheckboxChange(id, isChecked);
+     onCheckboxChange(id);
    };
 
   return (
-    <div className={styles.card} onClick={handleClick}>
+    <div className={styles.card}>
       <div className={styles.card__checkbox}>
         <input
           type="checkbox"
           className="delete-checkbox"
-          onChange={handleCheckboxChange}
+          onChange={() => onCheckboxChange(id)}
         />
       </div>
       <span>{sku}</span>
