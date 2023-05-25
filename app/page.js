@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
 
 import Header from "./components/header/Header";
 import Button from "./components/button/Button";
@@ -54,10 +53,7 @@ export default function Home() {
         method: "DELETE",
       }
     ).then((res) => res.json());
-    if (res.success) {
-      console.log(res);
-      revalidatePath("/");
-    }
+    if (res.success) router.push("/");
   };
 
   useEffect(() => {
