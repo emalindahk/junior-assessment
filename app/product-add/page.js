@@ -70,20 +70,16 @@ function ProductAdd() {
     setCategory("1");
   }, []);
 
-  const actions = (
-    <>
-      <Button primary onClick={handleSubmit}>
-        Save
-      </Button>
-      <Link className={styles.productAdd__action} href="/">
-        Cancel
-      </Link>
-    </>
-  );
-
   return (
     <div className={styles.productAdd}>
-      <Header label="Product Add" children={actions} />
+      <Header label="Product Add">
+        <Button primary onClick={handleSubmit}>
+          Save
+        </Button>
+        <Link className={styles.productAdd__action} href="/">
+          Cancel
+        </Link>
+      </Header>
       <form className={styles.productAdd__form} id="product_form">
         <Input
           id="sku"

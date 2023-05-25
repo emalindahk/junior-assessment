@@ -55,7 +55,7 @@ export default function Home() {
       }
     ).then((res) => res.json());
     if (res.success) {
-      console.log(res)
+      console.log(res);
       revalidatePath("/");
     }
   };
@@ -64,20 +64,16 @@ export default function Home() {
     fetchProducts();
   }, [fetchProducts]);
 
-  const actions = (
-    <>
-      <Link className={styles.main__link} href="/product-add">
-        Add
-      </Link>
-      <Button onClick={handleDelete} deleteBtn>
-        Mass Delete
-      </Button>
-    </>
-  );
-
   return (
     <main className={styles.main}>
-      <Header label="Product List" children={actions} />
+      <Header label="Product List">
+        <Link className={styles.main__link} href="/product-add">
+          Add
+        </Link>
+        <Button onClick={handleDelete} deleteBtn>
+          Mass Delete
+        </Button>
+      </Header>
       <div className={styles.main__productList}>
         {products.map((item) => (
           <ProductCard
