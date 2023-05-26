@@ -69,15 +69,16 @@ function ProductAdd() {
   useEffect(() => {
     setCategory("1");
   }, []);
+  
 
   return (
     <div className={styles.productAdd}>
       <Header label="Product Add">
         <Button primary onClick={handleSubmit}>
-          Save
+          SAVE
         </Button>
         <Link className={styles.productAdd__action} href="/">
-          Cancel
+          CANCEL
         </Link>
       </Header>
       <form className={styles.productAdd__form} id="product_form">

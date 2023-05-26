@@ -68,10 +68,10 @@ export default function Home() {
     <main className={styles.main}>
       <Header label="Product List">
         <Link className={styles.main__link} href="/product-add">
-          Add
+          ADD
         </Link>
         <Button onClick={handleDelete} deleteBtn>
-          Mass Delete
+          MASS DELETE
         </Button>
       </Header>
       <div className={styles.main__productList}>
