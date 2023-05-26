@@ -14,7 +14,7 @@ const categories = [
   {
     id: "DVD",
     value: 1,
-    name: "DVD-Disc",
+    name: "DVD",
   },
   {
     id: "Book",
@@ -75,10 +75,10 @@ function ProductAdd() {
     <div className={styles.productAdd}>
       <Header label="Product Add">
         <Button primary onClick={handleSubmit}>
-          SAVE
+          Save
         </Button>
         <Link className={styles.productAdd__action} href="/">
-          CANCEL
+          Cancel
         </Link>
       </Header>
       <form className={styles.productAdd__form} id="product_form">
